@@ -5,13 +5,74 @@ async function sprintChallenge5() { // Note the async keyword, in case you wish 
   const currentYear = new Date().getFullYear()
   footer.textContent = `© BLOOM INSTITUTE OF TECHNOLOGY ${currentYear}`
 
+  //Learner Card Builder
+  function buildLearnerCard(learner){
+    //Card elements
+    let card = document.createElement('div')
+    card.classList.add('card')
+
+    let learnerName = document.createElement('h3')
+    learnerName.textContent = learner.fullName
+    card.appendChild(learnerName)
+
+    let learnerEmail = document.createElement('div')
+    learnerEmail.textContent = learner.email
+    card.appendChild(learnerEmail)
+
+    let mentorHeader = document.createElement('h4')
+    mentorHeader.textContent = "Mentors"
+    mentorHeader.classList.add('closed')
+    card.appendChild(mentorHeader)
+
+    let learnerMentors = document.createElement('ul')
+    for (let mentor in learner.mentors){
+      let mentorLI = document.createElement('li')
+      mentorLI.textContent = learner.mentors[mentor]
+      learnerMentors.appendChild(mentorLI)
+    }
+    card.appendChild(learnerMentors)
+
+    //Card Functionality
+    card.addEventListener('click', event => {
+      if (event.target === card){
+        card.classList.toggle('selected')
+      }
+
+      if (event.target === mentorHeader){
+        if (document.querySelector('.selected')){
+          document.querySelector('.selected').classList.remove('selected')
+        }       
+        event.target.parentElement.classList.add('selected')
+        event.target.classList.toggle('closed')
+        event.target.classList.toggle('open')
+      }
+
+      if (card.classList.contains('selected')){
+        learnerName.textContent += ", ID " + learner.id
+      } else {
+        learnerName.textContent = learner.fullName
+      }
+      
+      if (document.querySelector('.selected') === null){
+        document.querySelector('p.info').textContent = "No learner is selected"
+      } else {
+        document.querySelector('p.info').textContent = `The selected learner is ${learner.fullName}`
+      }
+    })
+    return card;
+  }
+  //End card builder
+
+
   //Helper variables to retrieve data
   const learners = await axios.get('http://localhost:3003/api/learners')
   const mentors = await axios.get('http://localhost:3003/api/mentors')
   const learnersMentors = []
-  //Process retrieved data
+
   Promise.all([learners, mentors])
     .then(() => {
+      document.querySelector('p.info').textContent = "No learner is selected"
+      //Process retrieved data
       for (let learner of learners.data) {
         let mentorNames = []
         for (let mentor of mentors.data) {
@@ -31,7 +92,15 @@ async function sprintChallenge5() { // Note the async keyword, in case you wish 
         learnersMentors.push(currentLearner)
       }
     })
+  //Actually creating the learner cards
+    .then(() => {
+      for (let learner of learnersMentors){
+        document.querySelector('.cards').appendChild(buildLearnerCard(learner))
+      }
+    })
+    
 
+  
   
 
 
