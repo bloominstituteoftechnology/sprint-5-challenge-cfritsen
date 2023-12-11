@@ -34,8 +34,8 @@ async function sprintChallenge5() { // Note the async keyword, in case you wish 
 
     //Card Functionality
     card.addEventListener('click', event => {
-      if (event.target !== mentorHeader && (event.target === event.currentTarget || event.target === event.currentTarget.children)){
-        if (document.querySelector('.selected') && !this.event.currentTarget){
+      if (event.target !== mentorHeader){
+        if (document.querySelector('.selected') && !event.currentTarget){
           document.querySelector('.selected').classList.remove('selected')
         }
         event.target.classList.toggle('selected')
