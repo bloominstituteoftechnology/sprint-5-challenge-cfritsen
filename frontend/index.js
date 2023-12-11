@@ -34,8 +34,11 @@ async function sprintChallenge5() { // Note the async keyword, in case you wish 
 
     //Card Functionality
     card.addEventListener('click', event => {
-      if (event.target === card){
-        card.classList.toggle('selected')
+      if (event.target !== mentorHeader && (event.target === event.currentTarget || event.target === event.currentTarget.children)){
+        if (document.querySelector('.selected') && !this.event.currentTarget){
+          document.querySelector('.selected').classList.remove('selected')
+        }
+        event.target.classList.toggle('selected')
       }
 
       if (event.target === mentorHeader){
@@ -48,11 +51,11 @@ async function sprintChallenge5() { // Note the async keyword, in case you wish 
       }
 
       if (card.classList.contains('selected')){
-        learnerName.textContent += ", ID " + learner.id
+        learnerName.textContent = learner.fullName + ", ID " + learner.id
       } else {
         learnerName.textContent = learner.fullName
       }
-      
+
       if (document.querySelector('.selected') === null){
         document.querySelector('p.info').textContent = "No learner is selected"
       } else {
