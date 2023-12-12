@@ -34,20 +34,24 @@ async function sprintChallenge5() { // Note the async keyword, in case you wish 
 
     //Card Functionality
     card.addEventListener('click', event => {
-      if (event.target !== mentorHeader){
-        if (document.querySelector('.selected') && !event.currentTarget){
-          document.querySelector('.selected').classList.remove('selected')
+      if (document.querySelector('.selected')) {
+        let currentSelected = document.querySelector('.selected')
+        if (currentSelected !== event.currentTarget) {
+          currentSelected.classList.remove('selected')
+          let splitContent = currentSelected.firstChild.textContent.split(", ")
+          currentSelected.firstChild.textContent = splitContent[0]
         }
-        event.target.classList.toggle('selected')
       }
-
-      if (event.target === mentorHeader){
-        if (document.querySelector('.selected')){
-          document.querySelector('.selected').classList.remove('selected')
-        }       
-        event.target.parentElement.classList.add('selected')
-        event.target.classList.toggle('closed')
-        event.target.classList.toggle('open')
+      if (event.target === card){
+        event.target.classList.toggle('selected')
+      } else if (event.target === mentorHeader || event.target === learnerName || event.target === learnerEmail || event.target === learnerMentors){      
+        if (event.target === mentorHeader){
+          event.target.parentElement.classList.add('selected')
+          event.target.classList.toggle('closed')
+          event.target.classList.toggle('open')
+        } else {
+          event.target.parentElement.classList.toggle('selected')
+        }
       }
 
       if (card.classList.contains('selected')){
